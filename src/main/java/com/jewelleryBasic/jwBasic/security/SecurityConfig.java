@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.jewelleryBasic.jwBasic.service.serviceImpl.UserInfoService;
+import com.jewelleryBasic.jwBasic.service.serviceImpl.UserInfoServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +29,7 @@ public class SecurityConfig {
     // User Creation
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserInfoService();
+        return new UserInfoServiceImpl();
     }
  
     // Configuring HttpSecurity
@@ -37,7 +37,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
+                .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken/**").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/auth/user/**").authenticated()
                 .and()

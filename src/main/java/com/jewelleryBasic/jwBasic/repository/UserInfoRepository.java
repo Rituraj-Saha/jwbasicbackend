@@ -9,5 +9,5 @@ import com.jewelleryBasic.jwBasic.model.UserInfo;
 
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long>{
-	 Optional<UserInfo> findByName(String username);
+	 Optional<UserInfo> findByPhoneNumber(String phoneNumber);
 }
