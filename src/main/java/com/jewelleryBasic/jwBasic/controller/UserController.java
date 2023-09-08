@@ -32,6 +32,8 @@ import com.jewelleryBasic.jwBasic.security.JwtService;
 import com.jewelleryBasic.jwBasic.service.OtpGenerator;
 import com.jewelleryBasic.jwBasic.service.UserInfoService;
 import com.jewelleryBasic.jwBasic.service.serviceImpl.UserInfoServiceImpl;
+import com.jewelleryBasic.jwBasic.twilio.SmsRequest;
+import com.jewelleryBasic.jwBasic.twilio.SmsService;
 
 
 @RestController
@@ -48,9 +50,13 @@ public class UserController {
 	    
 	    @Autowired
 	    private OtpGenerator otpGenerator;
+	    
+	    @Autowired
+	    private SmsService smsService;
+	    
 	    Logger logger = LoggerFactory.getLogger(UserController.class);
 	    
-	   
+	    
 	    
 	    @GetMapping("/welcome")
 	    public ResponseEntity<String> welcome() {
@@ -109,6 +115,8 @@ public class UserController {
 	    		// To authenticate with that password we need to call /generateToken/generate api and will give the token
 	    		// append the another 4 deigit number with that number
 	    		// change the password into the new string
+	    		smsService.sendSms(new SmsRequest("+91"+otpRequest.getPhoneNumber(),otp));
+	    		
 	    		TimerTask task = new TimerTask() {
 	    	        public void run() {
 	    	        	String otp = otpGenerator.otp();
@@ -120,7 +128,7 @@ public class UserController {
 	    	    };
 	    	    Timer timer = new Timer("Timer");
 	    	    // Time after within the otp will get expire
-	    	    long delay = 20000L;
+	    	    long delay = 1000L*60*30;
 	    	    timer.schedule(task, delay);
 	    	    
 	    		return new ResponseEntity<OtpResponse>(new OtpResponse(otp),HttpStatus.OK);
