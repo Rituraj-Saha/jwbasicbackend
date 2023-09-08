@@ -11,19 +11,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserInfoDetails implements UserDetails {
-	private String name;
+	private String phoneNumber;
     private String password;
     private List<GrantedAuthority> authorities;
  
     public UserInfoDetails(com.jewelleryBasic.jwBasic.model.UserInfo userInfo) {
-        name = userInfo.getName();
+    	phoneNumber = userInfo.getPhoneNumber();
         password = userInfo.getPassword();
         authorities = Arrays.stream(userInfo.getRole().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
  
-    @Override
+    public UserInfoDetails(String phoneNumber, String password) {
+		// TODO Auto-generated constructor stub
+    	this.phoneNumber = phoneNumber;
+    	this.password = password;
+	}
+
+	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
@@ -35,7 +41,7 @@ public class UserInfoDetails implements UserDetails {
  
     @Override
     public String getUsername() {
-        return name;
+        return phoneNumber;
     }
  
     @Override

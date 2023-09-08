@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,7 @@ import com.jewelleryBasic.jwBasic.service.UserInfoService;
 import java.util.Optional;
 
 @Service
+@Primary
 public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
@@ -33,9 +35,10 @@ public class UserInfoServiceImpl implements UserInfoService{
  
         Optional<UserInfo> userDetail = repository.findByPhoneNumber(phoneNumber);
 //       System.out.println("derived Phone: "+userDetail);
-        logger.info("derived Phone: "+userDetail);
+        logger.info("derived from Phone: "+userDetail);
  
         // Converting userDetail to UserDetails
+       
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + phoneNumber));
     }

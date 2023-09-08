@@ -5,9 +5,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
- 
+
+import com.jewelleryBasic.jwBasic.controller.UserController;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,6 +27,7 @@ public class JwtService {
         Map<String, Object> claims = new HashMap();
         return createToken(claims, userName);
     }
+    Logger logger = LoggerFactory.getLogger(JwtService.class);
  
     private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
@@ -65,6 +71,7 @@ public class JwtService {
  
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        logger.info(userDetails.getUsername());
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
  

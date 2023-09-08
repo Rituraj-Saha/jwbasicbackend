@@ -79,10 +79,10 @@ public class UserController {
 	    	try {
 	    		  Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 	    		  if (authentication.isAuthenticated()) {
-	  	        	logger.info("Found");
+	  	        	logger.info("Authenticated User Found");
 	  	            return new ResponseEntity<TokenResponse>(new TokenResponse(jwtService.generateToken(authRequest.getUsername()),"Success"),HttpStatus.OK);
 	  	        } else {
-	  	        	logger.info("Not Found");
+	  	        	logger.info("Authenticated User Not Found");
 	  	        	 return new ResponseEntity<TokenResponse>(new TokenResponse("","Failed"),HttpStatus.UNAUTHORIZED);
 	  	        }
 	    	}
@@ -106,7 +106,7 @@ public class UserController {
 	    		//set the otp as the password
 	    		service.updatePasswordwithOtp(otpRequest.getPhoneNumber(), otp);
 	    		logger.info(service.loadUserByUsername(otpRequest.getPhoneNumber()).toString());
-	    		// authenticate with that password
+	    		// To authenticate with that password we need to call /generateToken/generate api and will give the token
 	    		// append the another 4 deigit number with that number
 	    		// change the password into the new string
 	    		TimerTask task = new TimerTask() {
@@ -119,8 +119,8 @@ public class UserController {
 	    	        }
 	    	    };
 	    	    Timer timer = new Timer("Timer");
-	    	    
-	    	    long delay = 10000L;
+	    	    // Time after within the otp will get expire
+	    	    long delay = 20000L;
 	    	    timer.schedule(task, delay);
 	    	    
 	    		return new ResponseEntity<OtpResponse>(new OtpResponse(otp),HttpStatus.OK);
