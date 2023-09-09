@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.jewelleryBasic.jwBasic.common.Util;
 import com.jewelleryBasic.jwBasic.controller.UserController;
 
 import java.security.Key;
@@ -34,7 +35,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + Util.TOKEN_EXPIRE_TIME))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
  

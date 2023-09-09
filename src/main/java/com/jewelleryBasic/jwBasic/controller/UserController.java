@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jewelleryBasic.jwBasic.common.Util;
 import com.jewelleryBasic.jwBasic.model.AuthRequest;
 import com.jewelleryBasic.jwBasic.model.OtpRequest;
 import com.jewelleryBasic.jwBasic.model.OtpResponse;
@@ -97,8 +98,6 @@ public class UserController {
 	    		logger.info(e.getMessage());
 	    		 return new ResponseEntity<TokenResponse>(new TokenResponse("","Failed"),HttpStatus.UNAUTHORIZED);
 			}
-	      
-	        
 	    }
 	    
 	    
@@ -115,6 +114,8 @@ public class UserController {
 	    		// To authenticate with that password we need to call /generateToken/generate api and will give the token
 	    		// append the another 4 deigit number with that number
 	    		// change the password into the new string
+	    		
+	    		//Send SMS TO THE MOBILE NUMBER
 	    		smsService.sendSms(new SmsRequest("+91"+otpRequest.getPhoneNumber(),otp));
 	    		
 	    		TimerTask task = new TimerTask() {
@@ -128,7 +129,7 @@ public class UserController {
 	    	    };
 	    	    Timer timer = new Timer("Timer");
 	    	    // Time after within the otp will get expire
-	    	    long delay = 1000L*60*30;
+	    	    long delay = Util.OTP_EXPIRE_TIME;
 	    	    timer.schedule(task, delay);
 	    	    
 	    		return new ResponseEntity<OtpResponse>(new OtpResponse(otp),HttpStatus.OK);
