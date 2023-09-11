@@ -9,14 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,9 +29,8 @@ import com.jewelleryBasic.jwBasic.model.UserInfo;
 import com.jewelleryBasic.jwBasic.security.JwtService;
 import com.jewelleryBasic.jwBasic.service.OtpGenerator;
 import com.jewelleryBasic.jwBasic.service.UserInfoService;
-import com.jewelleryBasic.jwBasic.service.serviceImpl.UserInfoServiceImpl;
-import com.jewelleryBasic.jwBasic.twilio.SmsRequest;
 import com.jewelleryBasic.jwBasic.twilio.SmsService;
+
 
 
 @RestController
@@ -54,6 +50,8 @@ public class UserController {
 	    
 	    @Autowired
 	    private SmsService smsService;
+	    
+	   
 	    
 	    Logger logger = LoggerFactory.getLogger(UserController.class);
 	    
@@ -116,7 +114,8 @@ public class UserController {
 	    		// change the password into the new string
 	    		
 	    		//Send SMS TO THE MOBILE NUMBER
-	    		smsService.sendSms(new SmsRequest("+91"+otpRequest.getPhoneNumber(),otp));
+	    		
+	    		smsService.sendSms("+91"+otpRequest.getPhoneNumber(),otp);
 	    		
 	    		TimerTask task = new TimerTask() {
 	    	        public void run() {
