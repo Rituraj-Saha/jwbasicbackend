@@ -1,6 +1,9 @@
 package com.jewelleryBasic.jwBasic.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -31,6 +34,23 @@ public class UserInfo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long Uid;
 	
+	public UserInfo(String name, String email, String password, String role, String phoneNumber, String addressLine,
+			String pinCode, String state, String country, String joining_date) throws ParseException {
+		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.role = role;
+		this.phoneNumber = phoneNumber;
+		this.addressLine = addressLine;
+		this.pinCode = pinCode;
+		this.state = state;
+		this.country = country;
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+		Date date = formatter.parse(joining_date);
+		this.joining_date = date;
+	}
+
 	@Column(name = "name", nullable = false, unique = false)
 	private String name;
 	
@@ -43,7 +63,7 @@ public class UserInfo {
 	@Column(name = "role", nullable = false, unique = false)
 	private String role;
 	
-	@Column(name = "phoneNumber", nullable = false, unique = false)
+	@Column(name = "phoneNumber", nullable = false, unique = true)
 	private String phoneNumber;
 	
 	@Column(name = "addressLine", nullable = false, unique = false)

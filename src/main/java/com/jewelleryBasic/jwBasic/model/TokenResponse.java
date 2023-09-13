@@ -1,5 +1,7 @@
 package com.jewelleryBasic.jwBasic.model;
 
+import com.jewelleryBasic.jwBasic.frontEndModel.UserDetails;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenResponse {
 	String token;
-	String message;
+	UserDetails userDetails;
 	
 }

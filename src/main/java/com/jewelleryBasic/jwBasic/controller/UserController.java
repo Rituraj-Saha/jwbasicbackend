@@ -1,5 +1,7 @@
 package com.jewelleryBasic.jwBasic.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Timer;
@@ -8,6 +10,7 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jewelleryBasic.jwBasic.common.Util;
+import com.jewelleryBasic.jwBasic.frontEndModel.UserDetails;
 import com.jewelleryBasic.jwBasic.model.AuthRequest;
 import com.jewelleryBasic.jwBasic.model.OtpRequest;
 import com.jewelleryBasic.jwBasic.model.OtpResponse;
@@ -63,15 +67,38 @@ public class UserController {
 	    }
 	 
 	    @PostMapping("/addNewUser")
-	    public String addNewUser(@RequestBody UserInfo userInfo) {
-	        return service.addUser(userInfo);
+	    public ResponseEntity<OtpResponse> addNewUser(@RequestBody UserDetails userdetails){
+	    	String pattern = "dd/MM/yyyy";
+	    	String dateInString =new SimpleDateFormat(pattern).format(new Date());
+	    	if(userdetails.getPhoneNumber().equals("")||userdetails.getPhoneNumber().length()!=10)
+	    	{
+	    		return new ResponseEntity<OtpResponse>(new OtpResponse(),HttpStatus.BAD_REQUEST);
+	    	}
+	    	try { 
+	    		service.addUser(new UserInfo(userdetails.getName(),
+	        		userdetails.getEmail(),
+	        		"",
+	        		"ROLE_USER",
+	        		userdetails.getPhoneNumber(),
+	        		userdetails.getAddressLine(),
+	        		userdetails.getPinCode(),
+	        		userdetails.getState(),
+	        		"IN",
+	        		dateInString));
+	    	}
+	    	catch (ParseException e) {
+				// TODO: handle exception
+	    		return new ResponseEntity<OtpResponse>(new OtpResponse(),HttpStatus.FAILED_DEPENDENCY);
+			}
+	    	catch (Exception e) {
+				// TODO: handle exception
+	    		return new ResponseEntity<OtpResponse>(new OtpResponse(),HttpStatus.BAD_REQUEST);
+			}
+	       
+	       return authenticateAndGetOtp(new OtpRequest(userdetails.getPhoneNumber()));
 	    }
 	 
-	    @GetMapping("/user/userProfile")
-	    @PreAuthorize("hasAuthority('ROLE_USER')")
-	    public String userProfile() {
-	        return "Welcome to User Profile";
-	    }
+	    
 	 
 	    @GetMapping("/admin/adminProfile")
 	    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -85,16 +112,16 @@ public class UserController {
 	    		  Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 	    		  if (authentication.isAuthenticated()) {
 	  	        	logger.info("Authenticated User Found");
-	  	            return new ResponseEntity<TokenResponse>(new TokenResponse(jwtService.generateToken(authRequest.getUsername()),"Success"),HttpStatus.OK);
+	  	            return new ResponseEntity<TokenResponse>(new TokenResponse(jwtService.generateToken(authRequest.getUsername()),service.getUserDetal(authRequest.getUsername())),HttpStatus.OK);
 	  	        } else {
 	  	        	logger.info("Authenticated User Not Found");
-	  	        	 return new ResponseEntity<TokenResponse>(new TokenResponse("","Failed"),HttpStatus.UNAUTHORIZED);
+	  	        	 return new ResponseEntity<TokenResponse>(new TokenResponse("",new UserDetails()),HttpStatus.UNAUTHORIZED);
 	  	        }
 	    	}
 	    	catch (Exception e) {
 				// TODO: handle exception
 	    		logger.info(e.getMessage());
-	    		 return new ResponseEntity<TokenResponse>(new TokenResponse("","Failed"),HttpStatus.UNAUTHORIZED);
+	    		 return new ResponseEntity<TokenResponse>(new TokenResponse("",new UserDetails()),HttpStatus.UNAUTHORIZED);
 			}
 	    }
 	    
@@ -115,7 +142,7 @@ public class UserController {
 	    		
 	    		//Send SMS TO THE MOBILE NUMBER
 	    		
-	    		smsService.sendSms("+91"+otpRequest.getPhoneNumber(),otp);
+	    		//smsService.sendSms("+91"+otpRequest.getPhoneNumber(),otp);
 	    		
 	    		TimerTask task = new TimerTask() {
 	    	        public void run() {
@@ -137,4 +164,6 @@ public class UserController {
 	    	   	return new ResponseEntity<OtpResponse>(new OtpResponse("User not found"),HttpStatus.UNAUTHORIZED);
 	    	}
 	    }
+	    
+	    
 }

@@ -44,7 +44,7 @@ public class Product {
 	Integer stockQty;
 	
 	@JsonFormat(pattern="dd/mm/yyyy")
-	@Column(name = "publicationDate", nullable = false, unique = false)
+	@Column(name = "update_date", nullable = false, unique = false)
     @Temporal(TemporalType.DATE)
 	Date updateDate;
 	
@@ -56,4 +56,13 @@ public class Product {
 	
 	@Column(name = "costPrice", nullable = false, unique = false)
 	Double costPrice;
+	
+	@Column(name = "sellPrice", nullable = false, unique = false)
+	Double sellPrice;
+	
+	@Column(name = "description", nullable = false, unique = false)
+	Double description;
+	
+	@Column(name = "focused", nullable = false, unique = false)
+	Double focused;
 }
