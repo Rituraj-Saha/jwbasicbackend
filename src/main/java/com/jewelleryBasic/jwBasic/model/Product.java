@@ -60,8 +60,9 @@ public class Product {
 	@Column(name = "sellPrice", nullable = false, unique = false)
 	Double sellPrice;
 	
-	@Column(name = "description", nullable = false, unique = false)
-	Double description;
+	
+	@Column(name = "description", nullable = false, unique = false, length=8192)
+	String description;
 	
 	@Column(name = "focused", nullable = false, unique = false)
 	Double focused;
