@@ -40,7 +40,7 @@ import com.jewelleryBasic.jwBasic.twilio.SmsService;
 @RestController
 @RequestMapping("/auth")
 public class UserController {
-	  @Autowired
+	    @Autowired
 	    private UserInfoService service;
 	 
 	    @Autowired
@@ -60,12 +60,12 @@ public class UserController {
 	    Logger logger = LoggerFactory.getLogger(UserController.class);
 	    
 	    
-	    
 	    @GetMapping("/welcome")
 	    public ResponseEntity<String> welcome() {
 	        return new ResponseEntity<>("Welcome this endpoint is not secure",HttpStatus.OK);
 	    }
 	 
+	    
 	    @PostMapping("/addNewUser")
 	    public ResponseEntity<OtpResponse> addNewUser(@RequestBody UserDetails userdetails){
 	    	String pattern = "dd/MM/yyyy";
@@ -99,13 +99,13 @@ public class UserController {
 	    }
 	 
 	    
-	 
 	    @GetMapping("/admin/adminProfile")
 	    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	    public String adminProfile() {
 	        return "Welcome to Admin Profile";
 	    }
 	 
+	    
 	    @PostMapping("/generateToken/generate")
 	    public ResponseEntity<TokenResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
 	    	try {
