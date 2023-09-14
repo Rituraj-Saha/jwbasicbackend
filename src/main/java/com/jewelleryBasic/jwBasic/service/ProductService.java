@@ -7,5 +7,6 @@ import org.springframework.http.ResponseEntity;
 import com.jewelleryBasic.jwBasic.model.Product;
 
 public interface ProductService {
-	ResponseEntity<List<Product>> getProductsByPage(int PageNo);
+	List<Product> getProductsByPage(int PageNo);
+	ResponseEntity<Product> insertProduct(Product product);
 }

@@ -65,5 +65,5 @@ public class Product {
 	String description;
 	
 	@Column(name = "focused", nullable = false, unique = false)
-	Double focused;
+	String focused;
 }

@@ -28,12 +28,20 @@ public class ProductServiceImpl implements ProductService{
 
 
 	@Override
-	public ResponseEntity<List<Product>> getProductsByPage(int pageNo) {
+	public List<Product> getProductsByPage(int pageNo) {
 		// TODO Auto-generated method stub
 		Pageable pageWithElements = PageRequest.of(pageNo, 10);
 		Page<Product> allProducts = productRepository.findAll(pageWithElements);
 		
-		return new ResponseEntity<List<Product>>(allProducts.getContent(),HttpStatus.OK);
+		return allProducts.getContent();
+	}
+
+
+	@Override
+	public ResponseEntity<Product> insertProduct(Product product) {
+		// TODO Auto-generated method stub
+		Product addedProduct = productRepository.save(product);
+		return new ResponseEntity<Product>(addedProduct,HttpStatus.OK);
 	}
 
 }
