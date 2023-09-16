@@ -19,7 +19,6 @@ public class ProductInfoExpose {
     private String imageList;
     private Double basePrice;
     private Double discount;
-    private Double costPrice;
     private Double sellPrice;
    
   

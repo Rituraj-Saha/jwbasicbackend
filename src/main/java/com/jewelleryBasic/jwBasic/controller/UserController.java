@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jewelleryBasic.jwBasic.common.Util;
@@ -164,6 +165,13 @@ public class UserController {
 	    	   	return new ResponseEntity<OtpResponse>(new OtpResponse("User not found"),HttpStatus.UNAUTHORIZED);
 	    	}
 	    }
+	    
+	    @RequestMapping(value = "/generateToken/tokenExpireCheck",method = RequestMethod.POST)
+	    public ResponseEntity<Boolean> checkTokenExpire(@RequestBody String token){
+//	    	Boolean expirationFlag = jwtService.isTokenExpired(token);
+	    	ResponseEntity<Boolean> returningValue = new ResponseEntity<Boolean>(true,HttpStatus.OK);
+	    	return returningValue;
+	    } 
 	    
 	    
 }
