@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jewelleryBasic.jwBasic.common.Util;
+import com.jewelleryBasic.jwBasic.frontEndModel.Token;
 import com.jewelleryBasic.jwBasic.frontEndModel.UserDetails;
 import com.jewelleryBasic.jwBasic.model.AuthRequest;
 import com.jewelleryBasic.jwBasic.model.OtpRequest;
@@ -143,7 +144,7 @@ public class UserController {
 	    		
 	    		//Send SMS TO THE MOBILE NUMBER
 	    		
-	    		//smsService.sendSms("+91"+otpRequest.getPhoneNumber(),otp);
+//	    		smsService.sendSms("+91"+otpRequest.getPhoneNumber(),otp);
 	    		
 	    		TimerTask task = new TimerTask() {
 	    	        public void run() {
@@ -167,10 +168,18 @@ public class UserController {
 	    }
 	    
 	    @RequestMapping(value = "/generateToken/tokenExpireCheck",method = RequestMethod.POST)
-	    public ResponseEntity<Boolean> checkTokenExpire(@RequestBody String token){
-//	    	Boolean expirationFlag = jwtService.isTokenExpired(token);
-	    	ResponseEntity<Boolean> returningValue = new ResponseEntity<Boolean>(true,HttpStatus.OK);
-	    	return returningValue;
+	    public ResponseEntity<Boolean> checkTokenExpire(@RequestBody Token token){
+	    	try {
+	    	Boolean expirationFlag = jwtService.isTokenExpired(token.getToken());
+	    	System.out.println("from jwt Service: "+expirationFlag);
+	    	return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+	    	}
+	    	catch(Exception e) {
+	    		System.out.println("Token is: "+token.getToken());
+	    		System.err.println(e.fillInStackTrace());
+	    		return new ResponseEntity<Boolean>(false,HttpStatus.OK);
+	    	}
+	    	
 	    } 
 	    
 	    
