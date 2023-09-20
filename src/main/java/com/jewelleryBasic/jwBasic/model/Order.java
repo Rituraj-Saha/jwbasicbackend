@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long oid;
+	private Long oid;
 	
 	@Column(name = "phoneNumber", nullable = false, unique = false)
 	private String phoneNumber;
@@ -37,6 +37,12 @@ public class Order {
 	@Column(name = "orderDate", nullable = false, unique = false)
     @Temporal(TemporalType.DATE)
 	private Date orderDate;
+	
+	@Column(name = "address", nullable = false, unique = false)
+	private String address;
+	
+	@Column(name = "email", nullable = false, unique = false)
+	private String email;
 	
 	//placed/dispatched/cancelled/completed
 	@Column(name = "status", nullable = false, unique = false)

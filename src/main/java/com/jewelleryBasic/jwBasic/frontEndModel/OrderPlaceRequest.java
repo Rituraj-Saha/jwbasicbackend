@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseForStockCheck {
-	
-	String message;
+public class OrderPlaceRequest {
+	private String phoneNumber;
+	private String orderValue;
+	private Double totalPrice;
+	private String Address;
+	private String email;
 }

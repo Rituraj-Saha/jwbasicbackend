@@ -3,11 +3,11 @@ package com.jewelleryBasic.jwBasic.frontEndModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+//not used for now
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ResponseForStockCheck {
-	
-	String message;
+@NoArgsConstructor
+public class ProductPurchaseRequest {
+	Long pid;
+	int requestedStock;
 }

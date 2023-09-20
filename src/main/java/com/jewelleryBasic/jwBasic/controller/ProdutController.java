@@ -37,7 +37,7 @@ public class ProdutController {
 		List<ProductInfoExpose> productInfoExportList = new ArrayList<>();
 		for(Product p:listOfProducts) {
 			
-			productInfoExportList.add(new ProductInfoExpose(p.getPid(),p.getPname(),p.getDescription(),p.getThumbnail(),p.getImageList(),p.getBasePrice(),p.getDiscount(),p.getSellPrice()));
+			productInfoExportList.add(new ProductInfoExpose(p.getPid(),p.getPname(),p.getDescription(),p.getThumbnail(),p.getImageList(),p.getBasePrice(),p.getDiscount(),p.getSellPrice(),p.getStockQty()));
 			
 		}
 		return new ResponseEntity<List<ProductInfoExpose>>(productInfoExportList,HttpStatus.OK);

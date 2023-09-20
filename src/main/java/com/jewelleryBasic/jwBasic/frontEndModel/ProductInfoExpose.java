@@ -20,6 +20,7 @@ public class ProductInfoExpose {
     private Double basePrice;
     private Double discount;
     private Double sellPrice;
+    private Integer stockQty;
    
   
 }
