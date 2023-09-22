@@ -46,6 +46,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests().requestMatchers("/download/**").authenticated()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/product/**").authenticated()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/api/order/**").authenticated()
                 
                 .and()
                 .sessionManagement()
