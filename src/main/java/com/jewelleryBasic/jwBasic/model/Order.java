@@ -24,31 +24,33 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long oid;
 	
-	@Column(name = "phoneNumber", nullable = false, unique = false)
+	@Column(name = "phoneNumber")
 	private String phoneNumber;
 	
-	@Column(name = "orderValue", nullable = false, unique = false,length=8192)
+	@Column(name = "orderValue",length=8192)
 	private String orderValue;
 	
-	@Column(name = "totalPrice", nullable = false, unique = false)
+	@Column(name = "totalPrice")
 	private Double totalPrice;
 	
 	@JsonFormat(pattern="dd/mm/yyyy")
-	@Column(name = "orderDate", nullable = false, unique = false)
+	@Column(name = "orderDate")
     @Temporal(TemporalType.DATE)
 	private Date orderDate;
 	
-	@Column(name = "address", nullable = false, unique = false)
+	@Column(name = "address")
 	private String address;
 	
-	@Column(name = "email", nullable = false, unique = false)
+	@Column(name = "email")
 	private String email;
 	
 	//placed/dispatched/cancelled/completed
-	@Column(name = "status", nullable = false, unique = false)
+	@Column(name = "status")
 	private String status;
 	
 
 	@Column(name = "feedback", nullable = true, unique = false)
 	private String feedback;
+	
+
 }

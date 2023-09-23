@@ -1,14 +1,14 @@
 package com.jewelleryBasic.jwBasic.frontEndModel;
 
-import java.util.List;
+import com.jewelleryBasic.jwBasic.model.Order;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-//not used for now
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestForStockCheck {
-	List<ProductPurchaseRequest> productPurchaseReqests;
+public class OrderPlaceResponse {
+	private Order order;
+	private String msg;
 }

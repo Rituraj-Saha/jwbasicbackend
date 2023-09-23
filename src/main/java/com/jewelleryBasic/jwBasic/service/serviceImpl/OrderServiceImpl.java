@@ -2,53 +2,93 @@ package com.jewelleryBasic.jwBasic.service.serviceImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
 import com.jewelleryBasic.jwBasic.frontEndModel.OrderPlaceRequest;
+import com.jewelleryBasic.jwBasic.frontEndModel.OrderPlaceResponse;
+import com.jewelleryBasic.jwBasic.frontEndModel.ProductModelForOrder;
+
 import com.jewelleryBasic.jwBasic.model.Order;
+import com.jewelleryBasic.jwBasic.model.Product;
 import com.jewelleryBasic.jwBasic.repository.OrderRepository;
+import com.jewelleryBasic.jwBasic.repository.ProductRepository;
 import com.jewelleryBasic.jwBasic.service.OrderService;
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 	private OrderRepository orderRepository;
+	private ProductRepository productRepository;
 
-	public OrderServiceImpl(OrderRepository orderRepository) {
+	public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository) {
 		super();
 		this.orderRepository = orderRepository;
+		this.productRepository = productRepository;
 	}
 
 	@Override
-	public Order placeOrder(OrderPlaceRequest orderPlaceRequest){
+	public OrderPlaceResponse placeOrder(OrderPlaceRequest orderPlaceRequest) {
 		// TODO Auto-generated method stub
-		
-		Order order = new Order();
-		order.setAddress(orderPlaceRequest.getAddress());
-		order.setEmail(orderPlaceRequest.getEmail());
-		order.setOrderValue(orderPlaceRequest.getOrderValue());
-		order.setPhoneNumber(orderPlaceRequest.getPhoneNumber());
-		order.setStatus("placed");
-		order.setTotalPrice(orderPlaceRequest.getTotalPrice());
-		String pattern = "dd/MM/yyyy";
-    	String dateInString =new SimpleDateFormat(pattern).format(new Date());
-    	try {
-    	Date date=new SimpleDateFormat("dd/MM/yyyy").parse(dateInString);  
-    	order.setOrderDate(date);
-    	}
-    	catch (Exception e) {
-			// TODO: handle exception
-    		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
-    		Date date = new Date();
-    		order.setOrderDate(date);
+		Boolean sellFlag = true;
+		String errorMsgForStock ="";
+		for (ProductModelForOrder p : orderPlaceRequest.getOrderValue()) {
+			if (p.getRequestQty() > productRepository.getById(p.getPid()).getStockQty()) {
+				sellFlag = false;
+				errorMsgForStock = errorMsgForStock+"Pid: "+p.getPid()+"Product Name: "+p.getPname()+" Available stock: "+ productRepository.getById(p.getPid()).getStockQty()+" But request for"+p.getRequestQty()+",";
+			}
 		}
-		
-		return  orderRepository.save(order);
-		
+		if (sellFlag) {
+			
+			
+			for(ProductModelForOrder p : orderPlaceRequest.getOrderValue()) {
+				Product product = productRepository.findById(p.getPid()).get();
+				product.setStockQty(product.getStockQty()-p.getRequestQty());
+				productRepository.save(product);
+			}
+			Order order = new Order();
+			order.setAddress(orderPlaceRequest.getAddress());
+			order.setEmail(orderPlaceRequest.getEmail());
+			order.setOrderValue(orderPlaceRequest.getOrderValue().toString());
+			order.setPhoneNumber(orderPlaceRequest.getPhoneNumber());
+			order.setStatus("placed");
+			order.setTotalPrice(orderPlaceRequest.getTotalPrice());
+			
+			LocalDate dateObj = LocalDate.now();
+	        DateTimeFormatter formatterEx = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	        String dateEx = dateObj.format(formatterEx);
+	        System.out.println("Order dateString: "+dateEx);
+	        
+			
+			try {
+				
+				Date date = DateUtils.parseDate(dateEx, 
+						  new String[] { "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy" });
+				order.setOrderDate(date);
+			} catch (Exception e) {
+				// TODO: handle exception
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+				Date date = new Date();
+				order.setOrderDate(date);
+				System.err.println(e.getMessage());
+			}
+			
+			return new OrderPlaceResponse(orderRepository.save(order),"Oredr Placed Successfully");
+
+		}
+		return new OrderPlaceResponse(new Order(),errorMsgForStock);
 	}
-	
+
+	@Override
+	public List<Order> findOrderByPhoneNumber(String phoneNumber) {
+		// TODO Auto-generated method stub
+		return orderRepository.findOrderByPhoneNumber(phoneNumber);
+	}
 }
