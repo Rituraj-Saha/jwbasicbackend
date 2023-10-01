@@ -63,7 +63,7 @@ public class Product {
 	
 	@Column(name = "description", nullable = false, unique = false, length=8192)
 	String description;
-	
+	//yes/no
 	@Column(name = "focused", nullable = false, unique = false)
 	String focused;
 }

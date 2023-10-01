@@ -48,5 +48,12 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 
+	@Override
+	public List<Product> findAllFocusedProduct() {
+		// TODO Auto-generated method stub
+		return productRepository.findAllFocusedProduct();
+	}
+
+
 
 }

@@ -26,12 +26,13 @@ public class OrderController {
 	@RequestMapping(value = "/place-order",method = RequestMethod.POST)
 	ResponseEntity<OrderPlaceResponse> placeOrder(@RequestBody OrderPlaceRequest orderPlaceRequest){
 		OrderPlaceResponse orderPlaceResponse = orderService.placeOrder(orderPlaceRequest);
+		System.out.println("OrderRequest: "+orderPlaceRequest.getOrderValue().toString());
 		return new ResponseEntity<OrderPlaceResponse>(orderPlaceResponse,HttpStatus.OK); 
 	}
 	
 	//get order
 	@RequestMapping(value = "/order-history/findBy",method = RequestMethod.GET)
-	ResponseEntity<List<Order>> placeOrder(@RequestParam String phn){
+	ResponseEntity<List<Order>> getOrder(@RequestParam String phn){
 		
 		List<Order> orderHistory = orderService.findOrderByPhoneNumber(phn);
 		return new ResponseEntity<List<Order>>(orderHistory,HttpStatus.OK); 

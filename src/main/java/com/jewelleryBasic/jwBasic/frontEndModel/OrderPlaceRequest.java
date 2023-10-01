@@ -15,4 +15,7 @@ public class OrderPlaceRequest {
 	private Double totalPrice;
 	private String address;
 	private String email;
+	private String paymentMethod;
+	private String paymentStatus;
+	
 }

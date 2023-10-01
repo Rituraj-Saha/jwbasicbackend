@@ -13,6 +13,9 @@ import java.util.Optional;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
 import com.jewelleryBasic.jwBasic.frontEndModel.OrderPlaceRequest;
 import com.jewelleryBasic.jwBasic.frontEndModel.OrderPlaceResponse;
 import com.jewelleryBasic.jwBasic.frontEndModel.ProductModelForOrder;
@@ -42,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 		for (ProductModelForOrder p : orderPlaceRequest.getOrderValue()) {
 			if (p.getRequestQty() > productRepository.getById(p.getPid()).getStockQty()) {
 				sellFlag = false;
-				errorMsgForStock = errorMsgForStock+"Pid: "+p.getPid()+"Product Name: "+p.getPname()+" Available stock: "+ productRepository.getById(p.getPid()).getStockQty()+" But request for"+p.getRequestQty()+",";
+				errorMsgForStock = errorMsgForStock+"Pid: "+p.getPid()+" Product Name: "+p.getPname()+" Available stock: "+ productRepository.getById(p.getPid()).getStockQty()+" But request for "+p.getRequestQty()+", ";
 			}
 		}
 		if (sellFlag) {
@@ -56,29 +59,20 @@ public class OrderServiceImpl implements OrderService {
 			Order order = new Order();
 			order.setAddress(orderPlaceRequest.getAddress());
 			order.setEmail(orderPlaceRequest.getEmail());
-			order.setOrderValue(orderPlaceRequest.getOrderValue().toString());
-			order.setPhoneNumber(orderPlaceRequest.getPhoneNumber());
+			Gson gson = new Gson();
+			String jsonArray = gson.toJson(orderPlaceRequest.getOrderValue());
+		    order.setOrderValue(jsonArray);
+		    order.setPhoneNumber(orderPlaceRequest.getPhoneNumber());
 			order.setStatus("placed");
 			order.setTotalPrice(orderPlaceRequest.getTotalPrice());
-			
 			LocalDate dateObj = LocalDate.now();
 	        DateTimeFormatter formatterEx = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	        String dateEx = dateObj.format(formatterEx);
 	        System.out.println("Order dateString: "+dateEx);
-	        
+	        order.setOrderDate(dateEx);
 			
-			try {
-				
-				Date date = DateUtils.parseDate(dateEx, 
-						  new String[] { "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy" });
-				order.setOrderDate(date);
-			} catch (Exception e) {
-				// TODO: handle exception
-				SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
-				Date date = new Date();
-				order.setOrderDate(date);
-				System.err.println(e.getMessage());
-			}
+			order.setPaymentMethod(orderPlaceRequest.getPaymentMethod());
+			order.setPaymentStatus(orderPlaceRequest.getPaymentStatus());
 			
 			return new OrderPlaceResponse(orderRepository.save(order),"Oredr Placed Successfully");
 

@@ -11,6 +11,6 @@ import com.jewelleryBasic.jwBasic.model.Product;
 public interface ProductService {
 	List<Product> getProductsByPage(int PageNo);
 	ResponseEntity<Product> insertProduct(Product product);
-	
+	List<Product> findAllFocusedProduct();
 	
 }

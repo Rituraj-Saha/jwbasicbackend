@@ -42,6 +42,10 @@ public class ProdutController {
 		}
 		return new ResponseEntity<List<ProductInfoExpose>>(productInfoExportList,HttpStatus.OK);
 	}
+	@RequestMapping(value="/get-product/focusable",method=RequestMethod.GET)
+	ResponseEntity<List<Product>>findAllFocusedProduct(){
+		return new ResponseEntity<List<Product>>(productService.findAllFocusedProduct(),HttpStatus.OK);
+	};
 	
 	
 }
