@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jewelleryBasic.jwBasic.common.Util;
 import com.jewelleryBasic.jwBasic.frontEndModel.Token;
+import com.jewelleryBasic.jwBasic.frontEndModel.UpdateUserRequestModel;
 import com.jewelleryBasic.jwBasic.frontEndModel.UserDetails;
 import com.jewelleryBasic.jwBasic.model.AuthRequest;
 import com.jewelleryBasic.jwBasic.model.OtpRequest;
@@ -181,6 +182,12 @@ public class UserController {
 	    	}
 	    	
 	    } 
+	    
+	    @PostMapping("/user/update-user")
+	   public ResponseEntity<UserDetails> updateUser(@RequestBody UpdateUserRequestModel updateUserRequestModel){
+	    	System.out.println("Inside update");
+	    	return new ResponseEntity<UserDetails>( service.userUpdate(updateUserRequestModel.getPhn(), updateUserRequestModel.getAddress(), updateUserRequestModel.getEmail(), updateUserRequestModel.getName(), updateUserRequestModel.getPin_code(), updateUserRequestModel.getState()),HttpStatus.OK);
+	    }
 	    
 	    
 }

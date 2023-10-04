@@ -77,7 +77,6 @@ public class UserInfoServiceImpl implements UserInfoService{
 
 	@Override
 	public com.jewelleryBasic.jwBasic.frontEndModel.UserDetails getUserDetal(String phoneNumber) {
-		// TODO Auto-generated method stub
 		
           UserInfo userInfo = repository.findByPhoneNumber(phoneNumber).get();
           com.jewelleryBasic.jwBasic.frontEndModel.UserDetails details = new com.jewelleryBasic.jwBasic.frontEndModel.UserDetails(userInfo.getName(),
@@ -86,6 +85,21 @@ public class UserInfoServiceImpl implements UserInfoService{
         		  userInfo.getAddressLine(),
         		  userInfo.getPinCode(),
         		  userInfo.getState());
+		return details;
+	}
+
+	@Override
+	public com.jewelleryBasic.jwBasic.frontEndModel.UserDetails userUpdate(String phn, String address, String email, String name,
+			String pin_code, String state) {
+		
+		repository.userUpdate(phn, address, email, name, pin_code, state);
+		UserInfo userInfo = repository.findByPhoneNumber(phn).get();
+        com.jewelleryBasic.jwBasic.frontEndModel.UserDetails details = new com.jewelleryBasic.jwBasic.frontEndModel.UserDetails(userInfo.getName(),
+      		  userInfo.getEmail(),
+      		  userInfo.getPhoneNumber(),
+      		  userInfo.getAddressLine(),
+      		  userInfo.getPinCode(),
+      		  userInfo.getState());
 		return details;
 	}
 
