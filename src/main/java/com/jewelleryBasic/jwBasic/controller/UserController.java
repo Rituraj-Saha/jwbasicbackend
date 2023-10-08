@@ -145,7 +145,7 @@ public class UserController {
 	    		
 	    		//Send SMS TO THE MOBILE NUMBER
 	    		
-	    		//smsService.sendSms("+91"+otpRequest.getPhoneNumber(),otp);
+	    		smsService.sendSms("+91"+otpRequest.getPhoneNumber(),otp);
 	    		
 	    		TimerTask task = new TimerTask() {
 	    	        public void run() {
